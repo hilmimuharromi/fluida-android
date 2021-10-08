@@ -1,36 +1,56 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {View, Text, Heading, StatusBar, Box} from 'native-base';
-function HomeScreen() {
+import {View, Text, Heading, StatusBar, Modal, HStack, VStack, Button} from 'native-base';
+import { ListMenus, HeaderHome } from '../components/Home';
+function HomeScreen(props) {
+  const [showModal, setShowModal] = useState(false)
+
+ 
   return (
     <View style={styles.layout}>
+       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+        <Modal.Content maxWidth="400px" height="400">
+          <Modal.CloseButton />
+          <Modal.Header>User</Modal.Header>
+          <Modal.Body>
+            <VStack space={3}>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text fontWeight="medium">Name</Text>
+                <Text color="blueGray.400">Nama User</Text>
+              </HStack>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text fontWeight="medium">Email</Text>
+                <Text color="blueGray.400">user@mail.com</Text>
+              </HStack>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text fontWeight="medium">Join Date</Text>
+                <Text color="green.500">18-07-2021</Text>
+              </HStack>
+            </VStack>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+            colorScheme="red"
+              flex="1"
+              onPress={() => {
+                setShowModal(false)
+              }}
+            >
+              Logout
+            </Button>
+          </Modal.Footer>
+
+        </Modal.Content>
+        </Modal>
+
       <StatusBar backgroundColor="#219EBC" hidden={true} />
       <View style={styles.header}>
-        <View>
-          <Heading
-            mt="10"
-            pl="5"
-            pr="6"
-            fontSize="3xl"
-            letterSpacing="lg"
-            textAlign="left">
-            Hey, What Would
-          </Heading>
-          <Heading pl="5" pr="6" textAlign="left">
-            you like to learn today ?
-          </Heading>
-          <Heading pl="5" pr="6" textAlign="left">
-            today ?
-          </Heading>
-        </View>
-        <View style={styles.user}>
-          <Box bg="#fff" p="3" mt="5" w="80%" rounded="lg" shadow={2}>
-            Hi, User
-          </Box>
-        </View>
+        <HeaderHome setShowModal={setShowModal}  />
+        
       </View>
       <View style={styles.body}>
-        <Text>Body</Text>
+        <ListMenus {...props} />
+        
       </View>
     </View>
   );
