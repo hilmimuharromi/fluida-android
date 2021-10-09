@@ -10,17 +10,17 @@ const Header = ({
         <View>
           <Heading
             mt="10"
-            pl="5"
+            pl="30"
             pr="6"
             fontSize="3xl"
             letterSpacing="lg"
             textAlign="left">
             Hey, What Would
           </Heading>
-          <Heading pl="5" pr="6" textAlign="left">
+          <Heading pl="30" pr="6" textAlign="left">
             you like to learn today ?
           </Heading>
-          <Heading pl="5" pr="6" textAlign="left">
+          <Heading pl="30" pr="6" textAlign="left">
             today ?
           </Heading>
         </View>
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
       backgroundColor: '#219EBC',
       elevation: 4,
     },
-  
     user: {
       flexDirection: 'row',
       justifyContent: 'center',
