@@ -10,6 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@native-html/iframe-plugin": "^2.6.1",
     "@react-navigation/native": "^6.0.4",
     "@react-navigation/native-stack": "^6.2.2",
     "axios": "^0.22.0",
@@ -23,6 +24,7 @@
     "react-native-svg": "^12.1.1",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "^0.17.5",
+    "react-native-webview": "^11.22.2",
     "react-redux": "^7.2.5",
     "redux": "^4.1.1",
     "redux-persist": "^6.0.0",

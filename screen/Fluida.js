@@ -1,37 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Platform, FlatList, Dimensions, ScrollView } from 'react-native';
-import { View, Heading, Text, Box, Pressable, Modal } from 'native-base';
-import { ListMenus, ListPosts } from '../components/Fluida';
+import { StyleSheet,Dimensions, ScrollView } from 'react-native';
+import { View, Heading, Box, Pressable, Modal} from 'native-base';
+import { ListMenus, ListPosts, Questions } from '../components/Fluida';
 import AntdIcon from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
-import { useWindowDimensions } from 'react-native';
-import RenderHtml from 'react-native-render-html';
+import { Loading, ViewerHtml } from '../components/Base';
 
 export default function Fluida({ navigation }) {
   const { height } = Dimensions.get('window');
   const [activeMenu, setActiveMenu] = useState(0);
   const [menus, setMenus] = useState([])
   const [contents, setContents] = useState([])
-  const { width } = useWindowDimensions();
   const [showContent, setShowContent] = useState(false)
-  const [currentContent, setCurrentContent] = useState('<div>tes</div>')
+  const [currentContent, setCurrentContent] = useState({})
+  const [currentTitle, setCurrentTitle] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const renderersProps = {
-    img: {
-      enableExperimentalPercentWidth: true
-    }
-  };
 
-  const ViewContent = () => (<RenderHtml
-    contentWidth={width}
-    source={{ html: currentContent }}
-    renderersProps
-  />)
-
+  const ViewContent = () => (
+    currentContent.flag === 'soalLatihan' ? <Questions data={currentContent[currentContent.flag].questions}/>
+      : <ViewerHtml data={currentContent[currentContent.flag].content} />
+  )
 
 
   const getPlaylist = async () => {
     try {
+      setLoading(true)
       const { data } = await axios({
         method: 'get',
         url: 'https://fluida-server.herokuapp.com/playlist'
@@ -43,6 +37,9 @@ export default function Fluida({ navigation }) {
 
     } catch (err) {
       console.log('error', err)
+    } finally {
+      setLoading(false)
+
     }
   }
 
@@ -53,20 +50,23 @@ export default function Fluida({ navigation }) {
   useEffect(() => {
     if (menus.length > 0) {
       setContents(menus[activeMenu].contents)
-      console.log(menus[activeMenu].contents)
     }
-  }, [activeMenu])
+  }, [activeMenu, loading])
+
+
+  if (loading) return <View style={styles.layoutLoading}>
+    <Loading />
+  </View>
 
   return (
     <View style={styles.layout}>
       <Modal isOpen={showContent} onClose={() => setShowContent(false)} size={'full'}>
-        <Modal.Content>
+        <Modal.Content minH={height}>
           <Modal.CloseButton />
-          <Modal.Header>Return Policy</Modal.Header>
+          <Modal.Header>{currentTitle}</Modal.Header>
           <Modal.Body>
             <ScrollView>
               <ViewContent />
-
             </ScrollView>
           </Modal.Body>
         </Modal.Content>
@@ -77,7 +77,6 @@ export default function Fluida({ navigation }) {
             <AntdIcon name="left" size={30} color="#000" />
           </Box>
         </Pressable>
-
         <Heading fontSize="3xl" letterSpacing="lg" textAlign="left">
           Fluida Dinamis
         </Heading>
@@ -87,7 +86,7 @@ export default function Fluida({ navigation }) {
       </View>
       <View style={styles.bottom}>
         <ListPosts contents={contents} activeMenu={activeMenu} onClickContent={(data) => {
-          console.log('current', data)
+          setCurrentTitle(data[data.flag].title)
           setCurrentContent(data)
           setShowContent(true)
         }} />
@@ -113,4 +112,11 @@ const styles = StyleSheet.create({
   bottom: {
     flex: 3,
   },
+  layoutLoading: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  }
 });

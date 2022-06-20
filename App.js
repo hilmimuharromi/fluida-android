@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {HomeScreen, AboutScreen, FluidaScreen, PetunjukScreen, KiKdScreen, DaftarPustakaScreen} from './screen';
+import {HomeScreen, AboutScreen, FluidaScreen, PetunjukScreen, KiKdScreen, DaftarPustakaScreen, PetaKosepScreen} from './screen';
 import {extendTheme, NativeBaseProvider} from 'native-base';
+import { LogBox } from 'react-native';
 
 const newColorTheme = {
   brand: {
@@ -17,7 +18,12 @@ const newColorTheme = {
 const theme = extendTheme({colors: newColorTheme});
 const Stack = createNativeStackNavigator();
 
+
+
 const App = () => {
+  useEffect(() => {
+      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, [])
   return (
     <NativeBaseProvider theme={theme}>
       <NavigationContainer>
@@ -30,6 +36,7 @@ const App = () => {
           <Stack.Screen name="DaftarPustaka" component={DaftarPustakaScreen} />
           <Stack.Screen name="Fluida" component={FluidaScreen} />
           <Stack.Screen name="Ki-Kd" component={KiKdScreen} />
+          <Stack.Screen name="PetaKonsep" component={PetaKosepScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </NativeBaseProvider>
