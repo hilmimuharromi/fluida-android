@@ -1,29 +1,29 @@
 import React from 'react'
-import {View, StyleSheet} from 'react-native'
-import {Text, FlatList, Box, Input} from 'native-base'
+import {View, StyleSheet, TouchableOpacity} from 'react-native'
+import {Text, FlatList, Box, Input, Button} from 'native-base'
 import AntdIcon from 'react-native-vector-icons/AntDesign';
 
 export default function ListPosts({
-    activeMenu
+    activeMenu, contents,  onClickContent
 }) {
 
-    const data = [{
-        title: `${activeMenu.title} 1`
-    }, {
-        title: `${activeMenu.title} 2`
-    }, {
-        title: `${activeMenu.title} 3`
-    }, {
-        title: `${activeMenu.title} 4`
-    }, {
-        title: `${activeMenu.title} 1`
-    }, {
-        title: `${activeMenu.title} 2`
-    }, {
-        title: `${activeMenu.title} 3`
-    }, {
-        title: `${activeMenu.title} 4`
-    }]
+    // const data = [{
+    //     title: `${activeMenu.title} 1`
+    // }, {
+    //     title: `${activeMenu.title} 2`
+    // }, {
+    //     title: `${activeMenu.title} 3`
+    // }, {
+    //     title: `${activeMenu.title} 4`
+    // }, {
+    //     title: `${activeMenu.title} 1`
+    // }, {
+    //     title: `${activeMenu.title} 2`
+    // }, {
+    //     title: `${activeMenu.title} 3`
+    // }, {
+    //     title: `${activeMenu.title} 4`
+    // }]
     return (
         <>
         <View style={styles.layoutTitle}>
@@ -42,18 +42,17 @@ export default function ListPosts({
         </View>
         <View style={styles.layoutList}>
             <FlatList 
-            data={data} 
+            data={contents ? contents  :  []} 
             numColumns={1}
             renderItem={({item}) => (
-                <View style={styles.cardPost}>
+                <TouchableOpacity style={styles.cardPost} onPress={() =>  onClickContent(item[item.flag].content)}>
                     <Box w="50" h="50" mr="1" justifyContent="center" alignItems="center" rounded="lg" shadow="3" bg="darkBlue.200">
                         <AntdIcon name="caretright"  size={30} color="#fff" />
                     </Box>
-                    <Text>{item.title}</Text>
-                    </View>
+                    <Text>{item[item.flag].title}</Text>
+                    </TouchableOpacity>
             )}
             />
-
         </View>
         </>
     )

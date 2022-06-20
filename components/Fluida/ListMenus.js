@@ -2,36 +2,17 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, Platform, FlatList, Dimensions} from 'react-native';
 import {View, Text, Box, Pressable} from 'native-base';
 export default function ListMenus({
-    setMenu
+    setMenu, menus
 }) {
     const {width, height} = Dimensions.get('window');
     const [activeIndex, setActiveIndex] = useState(0);
     const SPACING = 5;
     const itemSize =  width * 0.3;
     const activeItemSize = width * 0.4
-    const menus = [
-      {
-        key: 1,
-        title: 'Materi',
-      },
-      {
-        key: 2,
-        title: 'Praktikum',
-      },
-      {
-        key: 3,
-        title: 'Tugas Proyek',
-      },
-      {
-        key: 4,
-        title: 'Soal Latihan',
-      },
-    ];
 
     useEffect(() => {
-        console.log(menus[activeIndex])
-        setMenu(menus[activeIndex])
-      
+        console.log(activeIndex)
+        setMenu(activeIndex)
     }, [activeIndex])
 
     
@@ -51,8 +32,6 @@ export default function ListMenus({
             console.log(activeIndex, e.nativeEvent.contentOffset.x );
           }}
           scrollEventThrottle={10}
-          decelerationRate={'fast'}
-          renderToHardwareTextureAndroid
           showsHorizontalScrollIndicator={false}
           ListFooterComponent={<View width={width*0.5}/>}
           renderItem={({item, index}) => (
