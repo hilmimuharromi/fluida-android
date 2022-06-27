@@ -2,7 +2,13 @@ import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {View, Text, Heading, StatusBar, Modal, HStack, VStack, Button} from 'native-base';
 import { ListMenus, HeaderHome } from '../components/Home';
+import {useDispatch,  useSelector} from 'react-redux';
+import {logout} from '../store/user/userReducer'
+import moment from "moment";
 function HomeScreen(props) {
+  const dispatch = useDispatch()
+  const state = useSelector(state => state.user);
+
   const [showModal, setShowModal] = useState(false)
 
  
@@ -16,15 +22,15 @@ function HomeScreen(props) {
             <VStack space={3}>
               <HStack alignItems="center" justifyContent="space-between">
                 <Text fontWeight="medium">Name</Text>
-                <Text color="blueGray.400">Nama User</Text>
+                <Text color="blueGray.400">{state.data.name}</Text>
               </HStack>
               <HStack alignItems="center" justifyContent="space-between">
                 <Text fontWeight="medium">Email</Text>
-                <Text color="blueGray.400">user@mail.com</Text>
+                <Text color="blueGray.400">{state.data.email}</Text>
               </HStack>
               <HStack alignItems="center" justifyContent="space-between">
                 <Text fontWeight="medium">Join Date</Text>
-                <Text color="green.500">18-07-2021</Text>
+                <Text color="green.500">{moment(state.data.createdAt).format("DD-MM-YYYY")}</Text>
               </HStack>
             </VStack>
           </Modal.Body>
@@ -33,7 +39,9 @@ function HomeScreen(props) {
             colorScheme="red"
               flex="1"
               onPress={() => {
+                dispatch(logout())
                 setShowModal(false)
+                // props.navigation.navigate("Login")
               }}
             >
               Logout

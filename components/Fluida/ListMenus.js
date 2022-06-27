@@ -29,7 +29,6 @@ export default function ListMenus({
           snapToAlignment='start'
           onMomentumScrollEnd={e => {
             setActiveIndex(Math.floor(e.nativeEvent.contentOffset.x / itemSize));
-            console.log(activeIndex, e.nativeEvent.contentOffset.x );
           }}
           scrollEventThrottle={10}
           showsHorizontalScrollIndicator={false}

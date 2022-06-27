@@ -1,10 +1,13 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {View, Text, Heading, StatusBar, Box, FlatList, Image, AspectRatio, Pressable} from 'native-base';
+import {View, Heading, Box,  Pressable, Text} from 'native-base';
 import {IconUser} from '../Icon'
+import {useDispatch, useSelector} from 'react-redux';
+
 const Header = ({
   setShowModal
 }) => {
+  const state = useSelector(state => state.user);
     return (
         <>
         <View>
@@ -26,7 +29,7 @@ const Header = ({
         </View>
         <View style={styles.user}>
           <Box bg="#fff" p="3" mt="5" w="80%" justifyContent="space-between" flexDirection="row" rounded="lg" shadow={2}>
-            Hi, User
+            {`Hi, ${state.data.name}`}
             <Pressable onPress={() => setShowModal(true)}>
             <IconUser />
             </Pressable>
