@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {View, Dimensions, StyleSheet} from 'react-native';
 import {ViewerHtml, BackTitle} from '../components/Base';
-import {Button, Text, Modal} from 'native-base';
+import {Button, Text, Modal, ScrollView} from 'native-base';
 import {PdfViewer} from '../components/Fluida';
 import DocumentPicker, {types} from 'react-native-document-picker';
 import {useSelector} from 'react-redux';
 
-const Praktikum = ({navigation, route}) => {
-  const data = useSelector(state => state.playlist.currentPlaylist.praktikum);
+const TugasProyek = ({navigation, route}) => {
+  const data = useSelector(state => state.playlist.currentPlaylist.tugasProyek);
   const [filePdf, setFilePdf] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showBtnPreview, setShowBtnPreview] = useState(false);
@@ -29,8 +29,9 @@ const Praktikum = ({navigation, route}) => {
   const submitAnswer = () => {
     console.log("submit")
   }
+  
   return (
-    <>
+    <View style={styles.layout}>
     <BackTitle title={`${data.title}`} onPress={() => navigation.goBack()}/>
       <Modal
         isOpen={showModal}
@@ -49,15 +50,11 @@ const Praktikum = ({navigation, route}) => {
           </Modal.Footer>
         </Modal.Content>
       </Modal>
-      <View>
+        <ScrollView contentContainerStyle={styles.containerHtml}>
         <ViewerHtml data={data.content} />
+        </ScrollView>
         <View style={styles.layoutBtn}>
-          {filePdf && (
-            <Button style={styles.btn} onPress={() => setShowModal(true)}>
-              <Text>Lihat PDF</Text>
-            </Button>
-          )}
-          {
+        {
             filePdf ? 
           <Button style={styles.btn} onPress={submitAnswer}>
             <Text>Submit</Text>
@@ -66,21 +63,20 @@ const Praktikum = ({navigation, route}) => {
           </Button>
           }
         </View>
-      </View>
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  layout:  {
+    flex: 1
+  },
   containerHtml: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    marginTop: 25,
-    height: Dimensions.get('window').height,
+    padding: 5
+    
   },
   layoutBtn: {
-    flex: 3,
+   height: 100,
     flexDirection: 'row',
     justifyContent:  "space-between",
     padding: 5
@@ -88,7 +84,7 @@ const styles = StyleSheet.create({
   btn: {
     width:  (Dimensions.get('window').width/2)-10,
     padding: 10,
-    height: 50,
+    height: 70,
   },
   pdf: {
     flex: 1,
@@ -97,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Praktikum;
+export default TugasProyek;

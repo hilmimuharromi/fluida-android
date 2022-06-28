@@ -6,12 +6,13 @@ import AntdIcon from 'react-native-vector-icons/AntDesign';
 import axios from 'axios';
 import {Loading, ViewerHtml} from '../components/Base';
 import DocumentPicker, {types} from 'react-native-document-picker';
-import { useDispatch, useSelector } from 'react-redux';
-import {GetPlaylist} from '../store/playlist/playlistThunk'
+import {useDispatch, useSelector} from 'react-redux';
+import {GetPlaylist} from '../store/playlist/playlistThunk';
+import {setCurrentPlaylist} from '../store/playlist/playlistReducer';
 
 export default function Fluida({navigation}) {
   const {height} = Dimensions.get('window');
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [activeMenu, setActiveMenu] = useState(0);
   const [menus, setMenus] = useState([]);
   const [contents, setContents] = useState([]);
@@ -21,15 +22,15 @@ export default function Fluida({navigation}) {
   const [loading, setLoading] = useState(false);
   const [fileResponse, setFileResponse] = useState([]);
 
-  const playlistState = useSelector((state) => state.playlist)
+  const playlistState = useSelector(state => state.playlist);
 
   useEffect(() => {
-    dispatch(GetPlaylist())
-  },[])
+    dispatch(GetPlaylist());
+  }, []);
 
-  useEffect(() =>  {
-    setMenus(playlistState.data)
-  },[])
+  useEffect(() => {
+    setMenus(playlistState.data);
+  }, []);
 
   const handleDocumentSelection = async () => {
     try {
@@ -38,7 +39,7 @@ export default function Fluida({navigation}) {
         type: [types.pdf],
       });
       setFileResponse(response[0]);
-      console.log('file', response[0])
+      console.log('file', response[0]);
       // handleUpload(response[0]);
     } catch (err) {
       console.warn(err);
@@ -77,47 +78,31 @@ export default function Fluida({navigation}) {
   const ViewContent = () => {
     switch (currentContent.flag) {
       case 'soalLatihan':
-        return <Questions data={currentContent[currentContent.flag].questions} />
+        return (
+          <Questions data={currentContent[currentContent.flag].questions} />
+        );
       case 'praktikum':
-        return <View>        
-        <Button onPress={handleDocumentSelection}>
-          <Text>Upload Tugas</Text>
-        </Button>
-        </View>
+        return (
+          <View>
+            <Button onPress={handleDocumentSelection}>
+              <Text>Upload Tugas</Text>
+            </Button>
+          </View>
+        );
       default:
-        return <ViewerHtml data={currentContent[currentContent.flag].content} />
+        return (
+          <ViewerHtml data={currentContent[currentContent.flag].content} />
+        );
     }
   };
-
-  const getPlaylist = async () => {
-    try {
-      setLoading(true);
-      const {data} = await axios({
-        method: 'get',
-        // url: 'https://fluida-server.herokuapp.com/playlist'
-        url: 'http://192.168.1.5:4000/playlist',
-      });
-      if (data.data) {
-        setMenus(data.data);
-      }
-    } catch (err) {
-      console.log('error', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // useEffect(() => {
-  //   getPlaylist();
-  // }, []);
 
   useEffect(() => {
     if (menus.length > 0) {
       setContents(menus[activeMenu].contents);
     }
-  }, [activeMenu, loading]);
+  }, [activeMenu, loading,  menus.length]);
 
-  if (playlistState.status === "loading")
+  if (playlistState.status === 'loading')
     return (
       <View style={styles.layoutLoading}>
         <Loading />
@@ -158,10 +143,22 @@ export default function Fluida({navigation}) {
           contents={contents}
           activeMenu={activeMenu}
           onClickContent={data => {
-            // setCurrentTitle(data[data.flag].title);
-            // setCurrentContent(data);
-            // setShowContent(true);
-            navigation.navigate("Praktikum", {data})
+            dispatch(setCurrentPlaylist(data));
+            console.log("data ===>", data)
+            switch (data.flag) {
+              case 'praktikum':
+                navigation.navigate('Praktikum');
+                break;
+              case 'tugasProyek':
+                navigation.navigate('TugasProyek');
+                break;
+                case 'soalLatihan':
+                  navigation.navigate('SoalLatihan');
+                  break;
+              default:
+                navigation.navigate('Materi');
+                break;
+            }
           }}
         />
       </View>
@@ -191,5 +188,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 });

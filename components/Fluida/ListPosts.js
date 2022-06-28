@@ -27,8 +27,9 @@ export default function ListPosts({activeMenu, contents, onClickContent}) {
           data={contents ? contents : []}
           numColumns={1}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => (
+          renderItem={({item, index}) => (
             <TouchableOpacity
+            key={index.toString()}
               style={styles.cardPost}
               onPress={() => onClickContent(item)}>
               <Box

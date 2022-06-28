@@ -1,11 +1,25 @@
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {HomeScreen, AboutScreen, FluidaScreen, PetunjukScreen, KiKdScreen, DaftarPustakaScreen, PetaKosepScreen,  PraktikumScreen, LoginScreen, RegisterScreen} from './screen';
-import {extendTheme, NativeBaseProvider,  } from 'native-base';
-import { LogBox, Text, ActivityIndicator, View } from 'react-native';
-import { Provider, useSelector } from 'react-redux';
-import store, {persistor } from './store/index';
+import {
+  HomeScreen,
+  AboutScreen,
+  FluidaScreen,
+  PetunjukScreen,
+  KiKdScreen,
+  DaftarPustakaScreen,
+  PetaKosepScreen,
+  PraktikumScreen,
+  LoginScreen,
+  RegisterScreen,
+  MateriScreen,
+  SoalLatihanScreen,
+  TugasProyekScreen
+} from './screen';
+import {extendTheme, NativeBaseProvider} from 'native-base';
+import {LogBox, Text, ActivityIndicator, View} from 'react-native';
+import {Provider, useSelector} from 'react-redux';
+import store, {persistor} from './store/index';
 import {PersistGate} from 'redux-persist/integration/react';
 
 const newColorTheme = {
@@ -21,13 +35,12 @@ const newColorTheme = {
 const theme = extendTheme({colors: newColorTheme});
 const Stack = createNativeStackNavigator();
 
-const Routes =  () => {
-  const state = useSelector((state) => state.user)
+const Routes = () => {
+  const state = useSelector(state => state.user);
 
   return (
     <NavigationContainer>
-      {
-        state.isLogin ? 
+      {state.isLogin ? (
         <Stack.Navigator
           screenOptions={{headerShown: false}}
           initialRouteName="Home">
@@ -39,24 +52,30 @@ const Routes =  () => {
           <Stack.Screen name="Ki-Kd" component={KiKdScreen} />
           <Stack.Screen name="PetaKonsep" component={PetaKosepScreen} />
           <Stack.Screen name="Praktikum" component={PraktikumScreen} />
-        </Stack.Navigator> : 
-        <Stack.Navigator  
-        screenOptions={{headerShown: false}}
-          initialRouteName="Login"
-        >
+          <Stack.Screen name="SoalLatihan" component={SoalLatihanScreen} />
+          <Stack.Screen name="TugasProyek" component={TugasProyekScreen} />
+          <Stack.Screen
+            screenOptions={{headerShown: true}}
+            name="Materi"
+            component={MateriScreen}
+          />
+        </Stack.Navigator>
+      ) : (
+        <Stack.Navigator
+          screenOptions={{headerShown: false}}
+          initialRouteName="Login">
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
         </Stack.Navigator>
-      }
-      </NavigationContainer>
-  )
-}
-
+      )}
+    </NavigationContainer>
+  );
+};
 
 const App = () => {
   useEffect(() => {
-      LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, [])
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   const LoadingMarkup = () => (
     <View
@@ -70,13 +89,11 @@ const App = () => {
 
   return (
     <Provider store={store}>
-       <PersistGate loading={<LoadingMarkup />} persistor={persistor}>
-
-    <NativeBaseProvider theme={theme}>
-      <Routes />
-    </NativeBaseProvider>
-    </PersistGate>
-
+      <PersistGate loading={<LoadingMarkup />} persistor={persistor}>
+        <NativeBaseProvider theme={theme}>
+          <Routes />
+        </NativeBaseProvider>
+      </PersistGate>
     </Provider>
   );
 };

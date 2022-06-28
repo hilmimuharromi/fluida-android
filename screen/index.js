@@ -8,6 +8,9 @@ import PetaKosepScreen from './PetaKonsep';
 import PraktikumScreen from './Praktikum';
 import  LoginScreen from "./Login";
 import RegisterScreen from './Register'
+import MateriScreen from './Materi'
+import SoalLatihanScreen from './SoalLatihan'
+import TugasProyekScreen from './TugasProyek';
 
 export {
   HomeScreen,
@@ -19,5 +22,8 @@ export {
   PetaKosepScreen,
   PraktikumScreen,
   LoginScreen,
-  RegisterScreen
+  RegisterScreen,
+  MateriScreen,
+  SoalLatihanScreen,
+  TugasProyekScreen
 };
